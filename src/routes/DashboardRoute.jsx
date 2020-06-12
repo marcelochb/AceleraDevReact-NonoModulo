@@ -1,101 +1,42 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Switch, useRouteMatch } from "react-router-dom";
-
-import {
-  getCategoriesFailed,
-  getCategoriesRequest,
-  getCategoriesSuccess,
-} from "../store/modules/content/actions";
-
-import {
-  getUserFailed,
-  getUserRequest,
-  getUserSuccess,
-  logout,
-} from "../store/modules/user/actions";
-
-import { endpoints } from "../modules/endpoints";
-import { request } from "../modules/request";
+import React from "react";
+import { Switch } from "react-router-dom";
 
 import { WelcomeBox } from "../components";
 import { Categories, Dashboard, PrivateRoute, Topbar } from "../containers";
 
 import PlaylistsRoute from "./PlaylistsRoute";
 import TracksRoute from "./TracksRoute";
-
-const { getCategories, getUserProfile } = endpoints;
+import { useDashboardRoute } from "../utils/hooks";
 
 const DashboardRoute = () => {
-  const { auth, content, user } = useSelector((state) => state);
-  const { path, url } = useRouteMatch();
-  const dispatch = useDispatch();
-  console.tron.log("dashboard");
-
-  useEffect(() => {
-    const requestOptions = {
-      ...getUserProfile.options,
-      headers: { Authorization: `Bearer ${auth.accessToken}` },
-    };
-
-    dispatch(getUserRequest());
-
-    request(getUserProfile.url, requestOptions)
-      .then((data) => dispatch(getUserSuccess(data)))
-      .catch((error) => {
-        if (error === 401) {
-          dispatch(logout());
-
-          return;
-        }
-
-        dispatch(getUserFailed(error));
-      });
-  }, [auth, dispatch]);
-
-  useEffect(() => {
-    const requestOptions = {
-      ...getCategories.options,
-      headers: { Authorization: `Bearer ${auth.accessToken}` },
-    };
-
-    dispatch(getCategoriesRequest());
-
-    request(getCategories.url, requestOptions)
-      .then((data) => dispatch(getCategoriesSuccess(data)))
-      .catch((error) => {
-        if (error === 401) {
-          dispatch(logout());
-
-          return;
-        }
-
-        dispatch(getCategoriesFailed(error));
-      });
-  }, [auth, dispatch]);
+  const { getUseDashboardRoute } = useDashboardRoute();
 
   return (
     <Dashboard>
       <Topbar />
 
       <Switch>
-        <PrivateRoute exact path={path}>
-          <WelcomeBox name={user.name} />
+        <PrivateRoute exact path={getUseDashboardRoute.path}>
+          <WelcomeBox name={getUseDashboardRoute.user.name} />
 
           <Categories
             isLoading={
-              content.status === "running" && content.categories.length === 0
+              getUseDashboardRoute.content.status === "running" &&
+              getUseDashboardRoute.content.categories.length === 0
             }
-            data={content.categories}
-            url={url}
+            data={getUseDashboardRoute.content.categories}
+            url={getUseDashboardRoute.url}
           />
         </PrivateRoute>
 
-        <PrivateRoute exact path={`${path}/:categoryId`}>
-          <PlaylistsRoute path={path} />
+        <PrivateRoute exact path={`${getUseDashboardRoute.path}/:categoryId`}>
+          <PlaylistsRoute path={getUseDashboardRoute.path} />
         </PrivateRoute>
 
-        <PrivateRoute exact path={`${path}/:categoryId/:playlistId`}>
+        <PrivateRoute
+          exact
+          path={`${getUseDashboardRoute.path}/:categoryId/:playlistId`}
+        >
           <TracksRoute />
         </PrivateRoute>
       </Switch>

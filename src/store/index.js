@@ -11,8 +11,7 @@ const enhancer =
     : null;
 
 const store = createStore(persistReducers(rootReducer),
-  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  enhancer
+  // enhancer
 );
 const persistor = persistStore(store);
 

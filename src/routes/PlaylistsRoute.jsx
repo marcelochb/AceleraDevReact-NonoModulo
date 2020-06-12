@@ -1,51 +1,12 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-
-import {
-  getCategoryPlaylistFailed,
-  getCategoryPlaylistRequest,
-  getCategoryPlaylistSuccess,
-} from "../store/modules/content/actions";
-
-import { logout } from "../store/modules/user/actions";
+import React from "react";
 
 import { Playlists } from "../containers";
 
-import { endpoints } from "../modules/endpoints";
 import { getContentNameById } from "../modules/helpers";
-import { request, sanitizeUrl } from "../modules/request";
-
-const { getCategoryPlaylists } = endpoints;
+import { usePlaylistRoute } from "../utils/hooks";
 
 const PlaylistsRoute = ({ path }) => {
-  const { auth, content } = useSelector((state) => state);
-  const dispatch = useDispatch();
-  const { categoryId } = useParams();
-
-  useEffect(() => {
-    const requestOptions = {
-      ...getCategoryPlaylists.options,
-      headers: { Authorization: `Bearer ${auth.accessToken}` },
-    };
-
-    dispatch(getCategoryPlaylistRequest());
-
-    request(
-      sanitizeUrl(getCategoryPlaylists.url, { categoryId }),
-      requestOptions
-    )
-      .then((data) => dispatch(getCategoryPlaylistSuccess(data)))
-      .catch((error) => {
-        if (error === 401) {
-          dispatch(logout());
-
-          return;
-        }
-
-        dispatch(getCategoryPlaylistFailed(error));
-      });
-  }, [auth, categoryId, dispatch]);
+  const { categoryId, content } = usePlaylistRoute();
 
   return (
     <Playlists

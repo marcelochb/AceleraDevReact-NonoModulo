@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { debounce } from "lodash";
+import React from "react";
 import Ink from "react-ink";
 
 import { endpoints } from "../../modules/endpoints";
@@ -10,31 +9,10 @@ import backgroundImageDesktop from "../../assets/images/app-intro-2.jpg";
 import { Logo } from "../../components";
 
 import "./Login.scss";
+import { useLogin } from "../../utils/hooks";
 
 const Login = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  const onResizeHandler = (e) => {
-    const { innerWidth } = e.target;
-
-    if (innerWidth <= 768) {
-      setIsMobile(true);
-
-      return;
-    }
-
-    setIsMobile(false);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", debounce(onResizeHandler, 250));
-
-    return () => {
-      window.removeEventListener("resize", debounce(onResizeHandler));
-    };
-  }, []);
-
-  const screenWidth = window.innerWidth;
+  const { isMobile, screenWidth } = useLogin();
 
   return (
     <main

@@ -1,41 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
 import { BsPlayFill, BsVolumeUpFill } from "react-icons/bs";
 import Ink from "react-ink";
 
-import {
-  addTrackToPlayer,
-  removeTrackToPlayer,
-} from "../../store/modules/content/actions";
-
 import "./Track.scss";
+import { useTrack } from "../../utils/hooks";
 
 const Track = ({ track }) => {
-  const playingNowId = useSelector((state) => state.content.playingNowId);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const dispatch = useDispatch();
-
-  const handleClick = () => {
-    if (isPlaying && playingNowId === track.id) {
-      setIsPlaying(false);
-      dispatch(removeTrackToPlayer());
-
-      return;
-    }
-
-    dispatch(addTrackToPlayer(track));
-
-    setIsPlaying(!isPlaying);
-  };
-
-  useEffect(() => {
-    if (playingNowId === track.id) {
-      return;
-    }
-
-    setIsPlaying(false);
-  }, [playingNowId, track.id]);
+  const { handleClick, isPlaying } = useTrack(track);
 
   return (
     <div
