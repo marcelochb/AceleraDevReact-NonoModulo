@@ -4,9 +4,9 @@ import { persistReducer } from 'redux-persist';
 export default reducers => {
   const persistedReducer = persistReducer(
     {
-      key: 'spotify',
+      key: 'spotifyStorage',
       storage,
-      whitelist: ['auth', 'user'],
+      whitelist: ['auth', 'content'],
     },
     reducers
   );

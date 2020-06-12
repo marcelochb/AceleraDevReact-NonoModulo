@@ -1,11 +1,4 @@
-import Loading from './Loading/Loading';
-import Logo from './Logo/Logo';
-import RouteHeader from './RouteHeader/RouteHeader';
-import WelcomeBox from './WelcomeBox/WelcomeBox';
-
-export {
-  Loading,
-  Logo,
-  RouteHeader,
-  WelcomeBox,
-}
+export { Loading } from "./Loading/Loading";
+export { Logo } from "./Logo/Logo";
+export { RouteHeader } from "./RouteHeader/RouteHeader";
+export { WelcomeBox } from "./WelcomeBox/WelcomeBox";

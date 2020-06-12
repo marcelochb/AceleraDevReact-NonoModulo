@@ -1,0 +1,4 @@
+export const AuthReduxType = {
+  CALLBACK_ERROR: 'CALLBACK_ERROR',
+  CALLBACK_SUCCESS: 'CALLBACK_SUCCESS',
+}

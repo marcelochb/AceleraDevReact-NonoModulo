@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import "./Loading.scss";
 
-const Loading = ({ text }) => (
+export const Loading = ({ text }) => (
   <React.Fragment>
     <div className="loading" data-testid="loading">
       <span />
@@ -27,5 +27,3 @@ Loading.propTypes = {
 Loading.defaultProps = {
   text: "Carregando...",
 };
-
-export default Loading;
